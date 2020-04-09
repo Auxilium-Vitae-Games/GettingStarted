@@ -1,0 +1,30 @@
+{
+  "version": "1.0",
+  "components": [
+    "Microsoft.VisualStudio.Component.CoreEditor",
+    "Microsoft.VisualStudio.Workload.CoreEditor",
+    "Microsoft.VisualStudio.Component.NuGet",
+    "Microsoft.VisualStudio.Component.Roslyn.Compiler",
+    "Microsoft.VisualStudio.Component.Roslyn.LanguageServices",
+    "Microsoft.Net.Component.4.8.SDK",
+    "Microsoft.Net.Component.4.7.2.TargetingPack",
+    "Microsoft.Net.ComponentGroup.DevelopmentPrerequisites",
+    "Microsoft.Component.MSBuild",
+    "Microsoft.Net.Component.4.5.2.TargetingPack",
+    "Microsoft.Net.Component.4.5.TargetingPack",
+    "Microsoft.VisualStudio.Component.IntelliCode",
+    "Microsoft.Net.Component.4.TargetingPack",
+    "Microsoft.Net.Component.4.5.1.TargetingPack",
+    "Microsoft.Net.Component.4.6.TargetingPack",
+    "Microsoft.Net.ComponentGroup.TargetingPacks.Common",
+    "Microsoft.Net.Component.4.6.2.TargetingPack",
+    "Microsoft.VisualStudio.Component.VC.CoreIde",
+    "Microsoft.VisualStudio.Component.Windows10SDK",
+    "Microsoft.VisualStudio.Component.VC.Tools.x86.x64",
+    "Microsoft.VisualStudio.Component.Windows10SDK.18362",
+    "Microsoft.VisualStudio.Component.VC.Redist.14.Latest",
+    "Microsoft.VisualStudio.Component.NuGet.BuildTools",
+    "Component.Unreal",
+    "Microsoft.VisualStudio.Workload.NativeGame"
+  ]
+}
