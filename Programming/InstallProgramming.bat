@@ -73,4 +73,4 @@ if not defined selectedpathgit (
 set gitrepository=%selectedpathgit%
 :noinputsgit
 
-/LOADINF="C:\AV\Games\GettingStarted\Programming\Settings\Config.asf"
+/LOADINF="%gitrepository%\Programming\Config\Config.asf"

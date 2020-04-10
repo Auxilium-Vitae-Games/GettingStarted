@@ -124,11 +124,4 @@ del /f "%vsexe%"
 
 call %gitrepository%\UE\Program\Setup.bat --force
 call %gitrepository%\UE\Program\GenerateProjectFiles.bat -2019
-
-
-pause
-pause
-pause
-pause
-
-echo build
+call %gitrepository%\UE\Program\Engine\Binaries\DotNET\UnrealBuildTool.exe -Target="UE4Editor Win64 Development" -Target="ShaderCompileWorker Win64 Development -Quiet" -WaitMutex -FromMsBuild -2019
