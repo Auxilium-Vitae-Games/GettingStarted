@@ -1,0 +1,13 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "{257C7285-4599-48F0-2A1A-C9BFBF3E245D}",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "GettingStarted",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}
