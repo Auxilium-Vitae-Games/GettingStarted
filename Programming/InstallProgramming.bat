@@ -4,9 +4,11 @@ cd \
 set errormsg=ERROR:
 
 set exe=.exe
+set msi=.msi
 set ps=.ps1
 
 set vscodeurl="https://az764295.vo.msecnd.net/stable/2aae1f26c72891c399f860409176fe435a154b13/VSCodeUserSetup-x64-1.44.0.exe"
+set vimurl="https://ftp.nluug.nl/pub/vim/pc/gvim82.exe"
 
 
 if not "%1"=="" (
@@ -45,10 +47,16 @@ del /f %vscodeps%
 start /wait %vscodeexe% /SP- /VERYSILENT /SUPPRESSMSGBOXES /CURRENTUSER /LOG="%logdir%\VSCodeLog" /NOCANCEL /NORESTART /DIR="%vscodedir%\Program" /MERGETASKS="!runcode"
 del /f "%vscodeexe%"
 
->null 2>&1 %vscodedir%\Program\bin\code --install-extension adelphes.android-dev-ext & >null 2>&1 %vscodedir%\Program\bin\code --install-extension aeschli.vscode-css-formatter & >null 2>&1 %vscodedir%\Program\bin\code --install-extension bat-snippets.bat-snippets & >null 2>&1 %vscodedir%\Program\bin\code --install-extension CAPTNCAPS.ue4-snippets & >null 2>&1 %vscodedir%\Program\bin\code --install-extension docsmsft.docs-markdown & >null 2>&1 %vscodedir%\Program\bin\code --install-extension forevolve.git-extensions-for-vs-code & >null 2>&1 %vscodedir%\Program\bin\code --install-extension foxundermoon.shell-format & >null 2>&1 %vscodedir%\Program\bin\code --install-extension lextudio.restructuredtext & >null 2>&1 %vscodedir%\Program\bin\code --install-extension mitaki28.vscode-clang & >null 2>&1 %vscodedir%\Program\bin\code --install-extension mpotthoff.vscode-android-webview-debug & >null 2>&1 %vscodedir%\Program\bin\code --install-extension ms-dotnettools.csharp & >null 2>&1 %vscodedir%\Program\bin\code --install-extension ms-python.python & >null 2>&1 %vscodedir%\Program\bin\code --install-extension ms-vscode.cpptools & >null 2>&1 %vscodedir%\Program\bin\code --install-extension msjsdiag.debugger-for-chrome & >null 2>&1 %vscodedir%\Program\bin\code --install-extension qinjia.view-in-browser & >null 2>&1 %vscodedir%\Program\bin\code --install-extension shd101wyy.markdown-preview-enhanced & >null 2>&1 %vscodedir%\Program\bin\code --install-extension sibiraj-s.vscode-scss-formatter
 
+set vimexe=%tempdir%\vim%exe%
+set vimps="%tempdir%\vim%ps%"
 
+echo $client = new-object System.Net.WebClient;$client.DownloadFile(%vimurl%,"%vimexe%");> %vimps%
+start /wait powershell -windowstyle hidden -file %vimps%
+del /f %vimps%
 
+start /wait %vimexe% /LANG=en /TYPE=FULL /S
+del /f "%vimexe%"
 
 
 pause
