@@ -6,8 +6,29 @@ set errormsg=ERROR:
 set exe=.exe
 set ps=.ps1
 
-set vscodeurl="https://az764295.vo.msecnd.net/stable/2aae1f26c72891c399f860409176fe435a154b13/VSCodeUserSetup-x64-1.44.0.exe"
-set vimurl="https://ftp.nluug.nl/pub/vim/pc/gvim82.exe"
+set gimpurl="https://download.gimp.org/mirror/pub/gimp/v2.10/windows/gimp-2.10.18-setup-2.exe"
+
+
+if "%3"=="y" (
+    goto:nomodelingcheck
+)
+if "%3"=="n" (
+    goto:nomodelingcheck
+)
+
+:modelingwrong
+set /p modelingcheck=Do you want to install modeling apps? (y/n)  
+if "%modelingcheck%"=="y" (
+    goto:modelingwell
+)
+if "%modelingcheck%"=="n" (
+    goto:modelingwell
+)
+echo %errormsg% Incorrect answer. Choose "y"(YES) or "n"(NO).
+goto:modelingwrong
+:modelingwell
+
+:nomodelingcheck
 
 
 if not "%1"=="" (
@@ -33,29 +54,23 @@ set logdir=%tempdir%\Log
 >nul 2>&1 mkdir "%logdir%"
 
 
-set vscodedir=%frameworkdir%\VSCode
->nul 2>&1 mkdir "%vscodedir%"
+set gimpdir=%frameworkdir%\GIMP
+>nul 2>&1 mkdir "%gimpdir%"
 
-set vscodeexe=%tempdir%\vscode%exe%
-set vscodeps="%tempdir%\vscode%ps%"
+set gimpexe=%tempdir%\gimp%exe%
+set gimpps="%tempdir%\gimp%ps%"
 
-echo $client = new-object System.Net.WebClient;$client.DownloadFile(%vscodeurl%,"%vscodeexe%");> %vscodeps%
-start /wait powershell -windowstyle hidden -file %vscodeps%
-del /f %vscodeps%
+echo $client = new-object System.Net.WebClient;$client.DownloadFile(%gimpurl%,"%gimpexe%");> %gimpps%
+start /wait powershell -windowstyle hidden -file %gimpps%
+del /f %gimpps%
 
-start /wait %vscodeexe% /SP- /VERYSILENT /SUPPRESSMSGBOXES /CURRENTUSER /LOG="%logdir%\VSCodeLog" /NOCANCEL /NORESTART /DIR="%vscodedir%\Program" /MERGETASKS="!runcode"
-del /f "%vscodeexe%"
+start /wait %gimpexe% /SP- /VERYSILENT /SUPPRESSMSGBOXES /CURRENTUSER /LOG="%logdir%\GIMPLog" /NOCANCEL /NORESTART /DIR="%gimpdir%\Program"
+del /f "%gimpexe%"
 
 
-set vimexe=%tempdir%\vim%exe%
-set vimps="%tempdir%\vim%ps%"
-
-echo $client = new-object System.Net.WebClient;$client.DownloadFile(%vimurl%,"%vimexe%");> %vimps%
-start /wait powershell -windowstyle hidden -file %vimps%
-del /f %vimps%
-
-start /wait %vimexe% /LANG=en /TYPE=FULL /S
-del /f "%vimexe%"
+if "%modelingcheck%"=="y" (
+    call %gitrepository%\Scripts\InstallVisualModeling.bat %frameworkdir% %gitrepository%
+)
 
 
 pause

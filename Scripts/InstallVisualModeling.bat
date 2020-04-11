@@ -3,11 +3,10 @@ cd \
 
 set errormsg=ERROR:
 
-set exe=.exe
+set msi=.msi
 set ps=.ps1
 
-set vscodeurl="https://az764295.vo.msecnd.net/stable/2aae1f26c72891c399f860409176fe435a154b13/VSCodeUserSetup-x64-1.44.0.exe"
-set vimurl="https://ftp.nluug.nl/pub/vim/pc/gvim82.exe"
+set blenderurl="https://ftp.nluug.nl/pub/graphics/blender/release/Blender2.82/blender-2.82a-windows64.msi"
 
 
 if not "%1"=="" (
@@ -29,33 +28,16 @@ set frameworkdir=%selectedpathframework%
 set tempdir=%frameworkdir%\Temp
 >nul 2>&1 mkdir %tempdir%
 
-set logdir=%tempdir%\Log
->nul 2>&1 mkdir "%logdir%"
 
+set blendermsi=%tempdir%\blender%msi%
+set blenderps="%tempdir%\blender%ps%"
 
-set vscodedir=%frameworkdir%\VSCode
->nul 2>&1 mkdir "%vscodedir%"
+echo $client = new-object System.Net.WebClient;$client.DownloadFile(%blenderurl%,"%blendermsi%");> %blenderps%
+start /wait powershell -windowstyle hidden -file %blenderps%
+del /f %blenderps%
 
-set vscodeexe=%tempdir%\vscode%exe%
-set vscodeps="%tempdir%\vscode%ps%"
-
-echo $client = new-object System.Net.WebClient;$client.DownloadFile(%vscodeurl%,"%vscodeexe%");> %vscodeps%
-start /wait powershell -windowstyle hidden -file %vscodeps%
-del /f %vscodeps%
-
-start /wait %vscodeexe% /SP- /VERYSILENT /SUPPRESSMSGBOXES /CURRENTUSER /LOG="%logdir%\VSCodeLog" /NOCANCEL /NORESTART /DIR="%vscodedir%\Program" /MERGETASKS="!runcode"
-del /f "%vscodeexe%"
-
-
-set vimexe=%tempdir%\vim%exe%
-set vimps="%tempdir%\vim%ps%"
-
-echo $client = new-object System.Net.WebClient;$client.DownloadFile(%vimurl%,"%vimexe%");> %vimps%
-start /wait powershell -windowstyle hidden -file %vimps%
-del /f %vimps%
-
-start /wait %vimexe% /LANG=en /TYPE=FULL /S
-del /f "%vimexe%"
+start /wait msiexec /i %blendermsi% /quiet /qn /norestart
+del /f "%blendermsi%"
 
 
 pause

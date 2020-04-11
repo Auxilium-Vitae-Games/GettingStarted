@@ -17,17 +17,63 @@ set gitexturl="https://github.com/gitextensions/gitextensions/releases/download/
 set vsurl="https://download.visualstudio.microsoft.com/download/pr/ac28b571-7709-4635-83d0-6277d6102ecb/893084d903e5d490b248099fdbb341b684fe026435ff2824f6e66f98fb0d1070/vs_Community.exe"
 
 
+:audiowrong
+set /p audiocheck=Do you want to install AUDIO apps? (y/n)  
+if "%audiocheck%"=="y" (
+    goto:audiowell
+)
+if "%audiocheck%"=="n" (
+    goto:audiowell
+)
+echo.
+echo %errormsg% Incorrect answer. Choose "y"(YES) or "n"(NO).
+echo.
+goto:audiowrong
+:audiowell
+
+
 :prograwrong
-set /p progracheck=Do you want install programming apps? (y/n)  
+set /p progracheck=Do you want to install PROGRAMMING apps? (y/n)  
 if "%progracheck%"=="y" (
     goto:prograwell
 )
 if "%progracheck%"=="n" (
     goto:prograwell
 )
+echo.
 echo %errormsg% Incorrect answer. Choose "y"(YES) or "n"(NO).
+echo.
 goto:prograwrong
 :prograwell
+
+
+:visualwrong
+set /p visualcheck=Do you want to install VISUAL apps? (y/n)  
+if "%visualcheck%"=="y" (
+    goto:visualwell
+)
+if "%visualcheck%"=="n" (
+    goto:modelingwell
+)
+echo.
+echo %errormsg% Incorrect answer. Choose "y"(YES) or "n"(NO).
+echo.
+goto:visualwrong
+:visualwell
+
+:modelingwrong
+set /p modelingcheck=Do you want to install MODELING apps? (y/n)  
+if "%modelingcheck%"=="y" (
+    goto:modelingwell
+)
+if "%modelingcheck%"=="n" (
+    goto:modelingwell
+)
+echo.
+echo %errormsg% Incorrect answer. Choose "y"(YES) or "n"(NO).
+echo.
+goto:modelingwrong
+:modelingwell
 
 
 if not "%1"=="" (
@@ -51,6 +97,23 @@ set tempdir=%frameworkdir%\Temp
 
 set logdir=%tempdir%\Log
 >nul 2>&1 mkdir "%logdir%"
+
+
+if not "%2"=="" (
+    set gitrepository=%2
+    goto:noinputsgit
+)
+:notselectedgit
+set ps_cmdgit=powershell "Add-Type -AssemblyName System.windows.forms|Out-Null;$f=New-Object System.Windows.Forms.FolderBrowserDialog;$f.ShowDialog()|Out-Null;$f.SelectedPath"
+for /f "delims=" %%I in ('%ps_cmdgit%') do set "selectedpathgit=%%I"
+if not defined selectedpathgit (
+    echo.
+    echo %errormsg% Did not choose a folder.
+    echo.
+    goto:notselectedgit
+)
+set gitrepository=%selectedpathgit%
+:noinputsgit
 
 
 set chromeexe=%tempdir%\chrome%exe%
@@ -153,23 +216,6 @@ echo.%PATH%|findstr /C:"%gitextdir%\Program" >nul 2>&1 || >nul setx /m PATH "%PA
 powershell "$s=(New-Object -COM WScript.Shell).CreateShortcut('%ProgramData%\Microsoft\Windows\Start Menu\Programs\GitExtensions.lnk');$s.TargetPath='%gitextdir%\Program\GitExtensions.exe';$s.Save()"
 
 
-if not "%2"=="" (
-    set gitrepository=%2
-    goto:noinputsgit
-)
-:notselectedgit
-set ps_cmdgit=powershell "Add-Type -AssemblyName System.windows.forms|Out-Null;$f=New-Object System.Windows.Forms.FolderBrowserDialog;$f.ShowDialog()|Out-Null;$f.SelectedPath"
-for /f "delims=" %%I in ('%ps_cmdgit%') do set "selectedpathgit=%%I"
-if not defined selectedpathgit (
-    echo.
-    echo %errormsg% Did not choose a folder.
-    echo.
-    goto:notselectedgit
-)
-set gitrepository=%selectedpathgit%
-:noinputsgit
-
-
 set vsdir=%frameworkdir%\VS
 >nul 2>&1 mkdir "%vsdir%"
 
@@ -188,8 +234,16 @@ call %gitrepository%\UE\Program\Setup.bat --force
 call %gitrepository%\UE\Program\GenerateProjectFiles.bat -2019
 call %gitrepository%\UE\Program\Engine\Binaries\DotNET\UnrealBuildTool.exe -Target="UE4Editor Win64 Development" -Target="ShaderCompileWorker Win64 Development -Quiet" -WaitMutex -FromMsBuild -2019
 
+
+if "%audiocheck%"=="y" (
+    call %gitrepository%\Scripts\InstallAudio.bat %frameworkdir% %gitrepository%
+)
 if "%progracheck%"=="y" (
     call %gitrepository%\Scripts\InstallProgramming.bat %frameworkdir% %gitrepository%
 )
+if "%visualcheck%"=="y" (
+    call %gitrepository%\Scripts\InstallVisual.bat %frameworkdir% %gitrepository% %modelingcheck%
+)
+
 
 %gitextdir%\Program\gitextensions browse "%gitrepository%"
