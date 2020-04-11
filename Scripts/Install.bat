@@ -17,6 +17,19 @@ set gitexturl="https://github.com/gitextensions/gitextensions/releases/download/
 set vsurl="https://download.visualstudio.microsoft.com/download/pr/ac28b571-7709-4635-83d0-6277d6102ecb/893084d903e5d490b248099fdbb341b684fe026435ff2824f6e66f98fb0d1070/vs_Community.exe"
 
 
+:prograwrong
+set /p progracheck=Do you want install programming apps? (y/n)  
+if "%progracheck%"=="y" (
+    goto:prograwell
+)
+if "%progracheck%"=="n" (
+    goto:prograwell
+)
+echo %errormsg% Incorrect answer. Choose "y"(YES) or "n"(NO).
+goto:prograwrong
+:prograwell
+
+
 if not "%1"=="" (
     set frameworkdir=%1
     goto:noinputsframework
@@ -175,5 +188,8 @@ call %gitrepository%\UE\Program\Setup.bat --force
 call %gitrepository%\UE\Program\GenerateProjectFiles.bat -2019
 call %gitrepository%\UE\Program\Engine\Binaries\DotNET\UnrealBuildTool.exe -Target="UE4Editor Win64 Development" -Target="ShaderCompileWorker Win64 Development -Quiet" -WaitMutex -FromMsBuild -2019
 
+if "%progracheck%"=="y" (
+    call %gitrepository%\Scripts\InstallProgramming.bat %frameworkdir% %gitrepository%
+)
 
 %gitextdir%\Program\gitextensions browse "%gitrepository%"
