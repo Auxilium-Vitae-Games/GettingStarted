@@ -16,6 +16,8 @@ set balenaurl="https://github.com/balena-io/etcher/releases/download/v1.5.80/bal
 set gitexturl="https://github.com/gitextensions/gitextensions/releases/download/v3.3.1/GitExtensions-pdbs-3.3.1.7897.zip"
 set vsurl="https://download.visualstudio.microsoft.com/download/pr/ac28b571-7709-4635-83d0-6277d6102ecb/893084d903e5d490b248099fdbb341b684fe026435ff2824f6e66f98fb0d1070/vs_Community.exe"
 
+set photoViewerUrl="https://download.kde.org/stable/digikam/7.1.0/digiKam-7.1.0-Win64.exe.meta4"
+
 
 :audiowrong
 set /p audiocheck=Do you want to install AUDIO apps? (y/n)  

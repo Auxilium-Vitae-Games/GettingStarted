@@ -40,12 +40,6 @@ start /wait msiexec /i %blendermsi% /quiet /qn /norestart
 del /f "%blendermsi%"
 
 
-pause
-pause
-pause
-pause
-
-
 if not "%2"=="" (
     set gitrepository=%2
     goto:noinputsgit

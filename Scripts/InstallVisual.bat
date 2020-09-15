@@ -7,6 +7,7 @@ set exe=.exe
 set ps=.ps1
 
 set gimpurl="https://download.gimp.org/mirror/pub/gimp/v2.10/windows/gimp-2.10.18-setup-2.exe"
+set shotcuturl="https://github.com/mltframework/shotcut/releases/download/v20.04.12/shotcut-win64-200412.exe"
 
 
 if "%3"=="y" (
@@ -68,15 +69,23 @@ start /wait %gimpexe% /SP- /VERYSILENT /SUPPRESSMSGBOXES /CURRENTUSER /LOG="%log
 del /f "%gimpexe%"
 
 
+set shotcutdir=%frameworkdir%\Shotcut
+>nul 2>&1 mkdir "%shotcutdir%"
+
+set shotcutexe=%tempdir%\shotcut%exe%
+set shotcutps="%tempdir%\shotcut%ps%"
+
+echo $client = new-object System.Net.WebClient;$client.DownloadFile(%shotcuturl%,"%shotcutexe%");> %shotcutps%
+start /wait powershell -windowstyle hidden -file %shotcutps%
+del /f %shotcutps%
+
+start /wait %shotcutexe% /S /D=%shotcutdir%\Program
+del /f "%shotcutexe%"
+
+
 if "%modelingcheck%"=="y" (
     call %gitrepository%\Scripts\InstallVisualModeling.bat %frameworkdir% %gitrepository%
 )
-
-
-pause
-pause
-pause
-pause
 
 
 if not "%2"=="" (

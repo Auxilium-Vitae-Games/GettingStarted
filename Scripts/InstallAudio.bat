@@ -46,12 +46,6 @@ start /wait %audaexe% /SP- /VERYSILENT /SUPPRESSMSGBOXES /CURRENTUSER /LOG="%log
 del /f "%audaexe%"
 
 
-pause
-pause
-pause
-pause
-
-
 if not "%2"=="" (
     set gitrepository=%2
     goto:noinputsgit

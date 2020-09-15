@@ -28,13 +28,11 @@ if not defined selectedpath (
     echo.
     goto:notselected
 )
-for /f %%I in ('dir /b "%selectedpath%\*.*"') do (
-    echo.
-    echo %errormsg% The folder is not empty. Please choose a empty folder.
-    echo.
-    goto:notselected
-)
-set frameworkdir=%selectedpath%
+set frameworkdir=%selectedpath%\ProgramData
+>nul 2>&1 mkdir %frameworkdir%
+
+set projectsdir=%selectedpath%\Projects
+>nul 2>&1 mkdir %projectsdir%
 
 set tempdir=%frameworkdir%\Temp
 >nul 2>&1 mkdir %tempdir%
@@ -71,9 +69,9 @@ start /wait %gitlfsexe% /SP- /VERYSILENT /SUPPRESSMSGBOXES /CURRENTUSER /LOG="%l
 del /f "%gitlfsexe%"
 
 
-%gitdir%\Program\cmd\git.exe clone --recursive %gitrepository% "%frameworkdir%\%gitname%"
-%gitdir%\Program\cmd\git.exe -C "%frameworkdir%\%gitname%" fetch --all
-%gitdir%\Program\cmd\git.exe -C "%frameworkdir%\%gitname%" pull origin master
+%gitdir%\Program\cmd\git.exe clone --recursive %gitrepository% "%projectsdir%\%gitname%"
+%gitdir%\Program\cmd\git.exe -C "%projectsdir%\%gitname%" fetch --all
+%gitdir%\Program\cmd\git.exe -C "%projectsdir%\%gitname%" pull origin master
 
 
-call "%frameworkdir%\%gitname%\Scripts\Install.bat" %frameworkdir% %frameworkdir%\%gitname%
+call "%frameworkdir%\%gitname%\Scripts\Install.bat" %frameworkdir% %projectsdir%\%gitname%
