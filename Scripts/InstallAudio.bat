@@ -10,7 +10,7 @@ set audaurl="https://storage.googleapis.com/google-code-archive-downloads/v2/cod
 
 
 if not "%1"=="" (
-    set frameworkdir=%1
+    set programDatadir=%1
     goto:noinputsframework
 )
 :notselectedframework
@@ -22,17 +22,18 @@ if not defined selectedpathframework (
     echo.
     goto:notselectedframework
 )
-set frameworkdir=%selectedpathframework%
+set programDatadir=%selectedpathframework%\ProgramData
+>nul 2>&1 mkdir %programDatadir%
 :noinputsframework
 
-set tempdir=%frameworkdir%\Temp
+set tempdir=%programDatadir%\Temp
 >nul 2>&1 mkdir %tempdir%
 
 set logdir=%tempdir%\Log
 >nul 2>&1 mkdir "%logdir%"
 
 
-set audadir=%frameworkdir%\Audacity
+set audadir=%programDatadir%\Audacity
 >nul 2>&1 mkdir "%audadir%"
 
 set audaexe=%tempdir%\auda%exe%
@@ -44,22 +45,3 @@ del /f %audaps%
 
 start /wait %audaexe% /SP- /VERYSILENT /SUPPRESSMSGBOXES /CURRENTUSER /LOG="%logdir%\AudacityLog" /NOCANCEL /NORESTART /DIR="%audadir%\Program"
 del /f "%audaexe%"
-
-
-if not "%2"=="" (
-    set gitrepository=%2
-    goto:noinputsgit
-)
-:notselectedgit
-set ps_cmdgit=powershell "Add-Type -AssemblyName System.windows.forms|Out-Null;$f=New-Object System.Windows.Forms.FolderBrowserDialog;$f.ShowDialog()|Out-Null;$f.SelectedPath"
-for /f "delims=" %%I in ('%ps_cmdgit%') do set "selectedpathgit=%%I"
-if not defined selectedpathgit (
-    echo.
-    echo %errormsg% Did not choose a folder.
-    echo.
-    goto:notselectedgit
-)
-set gitrepository=%selectedpathgit%
-:noinputsgit
-
-/LOADINF="%gitrepository%\Programming\Config\Config.asf"

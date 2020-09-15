@@ -2,13 +2,12 @@
 cd \
 
 set errormsg=ERROR:
-set nodownloadmsg=Waiting for downloading file. DO NOT CLOSE!
 
 set exe=.exe
 set ps=.ps1
 
-set giturl="https://github.com/git-for-windows/git/releases/download/v2.26.0.windows.1/Git-2.26.0-64-bit.exe"
-set gitlfsurl="https://github.com/git-lfs/git-lfs/releases/download/v2.10.0/git-lfs-windows-v2.10.0.exe"
+set giturl="https://github.com/git-for-windows/git/releases/download/v2.28.0.windows.1/Git-2.28.0-64-bit.exe"
+set gitlfsurl="https://github.com/git-lfs/git-lfs/releases/download/v2.12.0/git-lfs-windows-v2.12.0.exe"
 
 set gitrepository="https://github.com/AuxiliumVitaeGames/GettingStarted.git"
 
@@ -28,20 +27,26 @@ if not defined selectedpath (
     echo.
     goto:notselected
 )
-set frameworkdir=%selectedpath%\ProgramData
->nul 2>&1 mkdir %frameworkdir%
+for /f %%I in ('dir /b "%selectedpath%\*.*"') do (
+    echo.
+    echo %errormsg% The folder is not empty. Please choose a empty folder.
+    echo.
+    goto:notselected
+)
+set programDatadir=%selectedpath%\ProgramData
+>nul 2>&1 mkdir %programDatadir%
 
 set projectsdir=%selectedpath%\Projects
 >nul 2>&1 mkdir %projectsdir%
 
-set tempdir=%frameworkdir%\Temp
+set tempdir=%programDatadir%\Temp
 >nul 2>&1 mkdir %tempdir%
 
 set logdir=%tempdir%\Log
 >nul 2>&1 mkdir "%logdir%"
 
 
-set gitdir=%frameworkdir%\Git
+set gitdir=%programDatadir%\Git
 >nul 2>&1 mkdir "%gitdir%"
 
 set gitexe=%tempdir%\git%exe%
@@ -55,7 +60,7 @@ start /wait %gitexe% /SP- /VERYSILENT /SUPPRESSMSGBOXES /CURRENTUSER /LOG="%logd
 del /f "%gitexe%"
 
 
-set gitlfsdir=%frameworkdir%\GitLFS
+set gitlfsdir=%programDatadir%\GitLFS
 >nul 2>&1 mkdir %gitlfsdir%
 
 set gitlfsexe=%gitlfsdir%\gitlfs%exe%
@@ -74,4 +79,4 @@ del /f "%gitlfsexe%"
 %gitdir%\Program\cmd\git.exe -C "%projectsdir%\%gitname%" pull origin master
 
 
-call "%frameworkdir%\%gitname%\Scripts\Install.bat" %frameworkdir% %projectsdir%\%gitname%
+call "%projectsdir%\%gitname%\Scripts\Install.bat" %programDatadir% %projectsdir%\%gitname%

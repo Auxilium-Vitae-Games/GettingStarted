@@ -10,7 +10,7 @@ set blenderurl="https://ftp.nluug.nl/pub/graphics/blender/release/Blender2.82/bl
 
 
 if not "%1"=="" (
-    set frameworkdir=%1
+    set programDatadir=%1
     goto:noinputsframework
 )
 :notselectedframework
@@ -22,10 +22,11 @@ if not defined selectedpathframework (
     echo.
     goto:notselectedframework
 )
-set frameworkdir=%selectedpathframework%
+set programDatadir=%selectedpathframework%
+>nul 2>&1 mkdir %programDatadir%
 :noinputsframework
 
-set tempdir=%frameworkdir%\Temp
+set tempdir=%programDatadir%\Temp
 >nul 2>&1 mkdir %tempdir%
 
 
@@ -38,22 +39,3 @@ del /f %blenderps%
 
 start /wait msiexec /i %blendermsi% /quiet /qn /norestart
 del /f "%blendermsi%"
-
-
-if not "%2"=="" (
-    set gitrepository=%2
-    goto:noinputsgit
-)
-:notselectedgit
-set ps_cmdgit=powershell "Add-Type -AssemblyName System.windows.forms|Out-Null;$f=New-Object System.Windows.Forms.FolderBrowserDialog;$f.ShowDialog()|Out-Null;$f.SelectedPath"
-for /f "delims=" %%I in ('%ps_cmdgit%') do set "selectedpathgit=%%I"
-if not defined selectedpathgit (
-    echo.
-    echo %errormsg% Did not choose a folder.
-    echo.
-    goto:notselectedgit
-)
-set gitrepository=%selectedpathgit%
-:noinputsgit
-
-/LOADINF="%gitrepository%\Programming\Config\Config.asf"

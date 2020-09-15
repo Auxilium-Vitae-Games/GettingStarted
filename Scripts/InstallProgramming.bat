@@ -11,7 +11,7 @@ set vimurl="https://ftp.nluug.nl/pub/vim/pc/gvim82.exe"
 
 
 if not "%1"=="" (
-    set frameworkdir=%1
+    set programDatadir=%1
     goto:noinputsframework
 )
 :notselectedframework
@@ -23,17 +23,18 @@ if not defined selectedpathframework (
     echo.
     goto:notselectedframework
 )
-set frameworkdir=%selectedpathframework%
+set frameworkdir=%selectedpathprogramData%\ProgramData
+>nul 2>&1 mkdir %programDatadir%
 :noinputsframework
 
-set tempdir=%frameworkdir%\Temp
+set tempdir=%programDatadir%\Temp
 >nul 2>&1 mkdir %tempdir%
 
 set logdir=%tempdir%\Log
 >nul 2>&1 mkdir "%logdir%"
 
 
-set vscodedir=%frameworkdir%\VSCode
+set vscodedir=%programDatadir%\VSCode
 >nul 2>&1 mkdir "%vscodedir%"
 
 set vscodeexe=%tempdir%\vscode%exe%
@@ -58,12 +59,6 @@ start /wait %vimexe% /LANG=en /TYPE=FULL /S
 del /f "%vimexe%"
 
 
-pause
-pause
-pause
-pause
-
-
 if not "%2"=="" (
     set gitrepository=%2
     goto:noinputsgit
@@ -80,4 +75,4 @@ if not defined selectedpathgit (
 set gitrepository=%selectedpathgit%
 :noinputsgit
 
-/LOADINF="%gitrepository%\Programming\Config\Config.asf"
+REM /LOADINF="%gitrepository%\Programming\Config\Config.asf"

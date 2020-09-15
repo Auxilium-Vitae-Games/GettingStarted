@@ -79,7 +79,7 @@ goto:modelingwrong
 
 
 if not "%1"=="" (
-    set frameworkdir=%1
+    set programDatadir=%1
     goto:noinputsframework
 )
 :notselectedframework
@@ -91,10 +91,11 @@ if not defined selectedpathframework (
     echo.
     goto:notselectedframework
 )
-set frameworkdir=%selectedpathframework%
+set frameworkdir=%selectedpathprogramData%\ProgramData
+>nul 2>&1 mkdir %programDatadir%
 :noinputsframework
 
-set tempdir=%frameworkdir%\Temp
+set tempdir=%programDatadir%\Temp
 >nul 2>&1 mkdir %tempdir%
 
 set logdir=%tempdir%\Log
@@ -129,7 +130,7 @@ start /wait %chromeexe% /install /silent
 del /f "%chromeexe%"
 
 
-set zdir=%frameworkdir%\7Zip
+set zdir=%programDatadir%\7Zip
 >nul 2>&1 mkdir "%zdir%"
 
 set zexe=%tempdir%\7zip%exe%
@@ -167,7 +168,7 @@ start /wait %obsexe% /S
 del /f "%obsexe%"
 
 
-set lshotdir=%frameworkdir%\LShot
+set lshotdir=%programDatadir%\LShot
 >nul 2>&1 mkdir "%lshotdir%"
 
 set lshotexe=%tempdir%\lshot%exe%
@@ -181,7 +182,7 @@ start /wait %lshotexe% /SP- /VERYSILENT /SUPPRESSMSGBOXES /CURRENTUSER /LOG="%lo
 del /f "%lshotexe%"
 
 
-set balenadir=%frameworkdir%\Balena
+set balenadir=%programDatadir%\Balena
 >nul 2>&1 mkdir "%balenadir%"
 
 set balenaexe=%tempdir%\balena%exe%
@@ -195,7 +196,7 @@ start /wait %balenaexe% /S /D=%balenadir%\Program
 del /f "%balenaexe%"
 
 
-set gitextdir=%frameworkdir%\GitExtensions
+set gitextdir=%programDatadir%\GitExtensions
 >nul 2>&1 mkdir %gitextdir%
 
 set gitextzip=%tempdir%\gitext%zip%
@@ -215,10 +216,10 @@ del /f "%gitextzip%"
 
 echo.%PATH%|findstr /C:"%gitextdir%\Program" >nul 2>&1 || >nul setx /m PATH "%PATH%;%gitextdir%\Program"
 
-powershell "$s=(New-Object -COM WScript.Shell).CreateShortcut('%ProgramData%\Microsoft\Windows\Start Menu\Programs\GitExtensions.lnk');$s.TargetPath='%gitextdir%\Program\GitExtensions.exe';$s.Save()"
+REM powershell "$s=(New-Object -COM WScript.Shell).CreateShortcut('%ProgramData%\Microsoft\Windows\Start Menu\Programs\GitExtensions.lnk');$s.TargetPath='%gitextdir%\Program\GitExtensions.exe';$s.Save()"
 
 
-set vsdir=%frameworkdir%\VS
+set vsdir=%programDatadir%\VS
 >nul 2>&1 mkdir "%vsdir%"
 
 set vsexe=%tempdir%\vs%exe%
@@ -238,13 +239,13 @@ call %gitrepository%\UE\Program\Engine\Binaries\DotNET\UnrealBuildTool.exe -Targ
 
 
 if "%audiocheck%"=="y" (
-    call %gitrepository%\Scripts\InstallAudio.bat %frameworkdir% %gitrepository%
+    call %gitrepository%\Scripts\InstallAudio.bat %programDatadir% %gitrepository%
 )
 if "%progracheck%"=="y" (
-    call %gitrepository%\Scripts\InstallProgramming.bat %frameworkdir% %gitrepository%
+    call %gitrepository%\Scripts\InstallProgramming.bat %programDatadir% %gitrepository%
 )
 if "%visualcheck%"=="y" (
-    call %gitrepository%\Scripts\InstallVisual.bat %frameworkdir% %gitrepository% %modelingcheck%
+    call %gitrepository%\Scripts\InstallVisual.bat %programDatadir% %gitrepository% %modelingcheck%
 )
 
 

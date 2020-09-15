@@ -33,7 +33,7 @@ goto:modelingwrong
 
 
 if not "%1"=="" (
-    set frameworkdir=%1
+    set programDatadir=%1
     goto:noinputsframework
 )
 :notselectedframework
@@ -45,17 +45,18 @@ if not defined selectedpathframework (
     echo.
     goto:notselectedframework
 )
-set frameworkdir=%selectedpathframework%
+set programDatadir=%selectedpathframework%\ProgramData
+>nul 2>&1 mkdir %programDatadir%
 :noinputsframework
 
-set tempdir=%frameworkdir%\Temp
+set tempdir=%programDatadir%\Temp
 >nul 2>&1 mkdir %tempdir%
 
 set logdir=%tempdir%\Log
 >nul 2>&1 mkdir "%logdir%"
 
 
-set gimpdir=%frameworkdir%\GIMP
+set gimpdir=%programDatadir%\GIMP
 >nul 2>&1 mkdir "%gimpdir%"
 
 set gimpexe=%tempdir%\gimp%exe%
@@ -69,7 +70,7 @@ start /wait %gimpexe% /SP- /VERYSILENT /SUPPRESSMSGBOXES /CURRENTUSER /LOG="%log
 del /f "%gimpexe%"
 
 
-set shotcutdir=%frameworkdir%\Shotcut
+set shotcutdir=%programDatadir%\Shotcut
 >nul 2>&1 mkdir "%shotcutdir%"
 
 set shotcutexe=%tempdir%\shotcut%exe%
@@ -84,24 +85,5 @@ del /f "%shotcutexe%"
 
 
 if "%modelingcheck%"=="y" (
-    call %gitrepository%\Scripts\InstallVisualModeling.bat %frameworkdir% %gitrepository%
+    call %gitrepository%\Scripts\InstallVisualModeling.bat %programDatadir% %gitrepository%
 )
-
-
-if not "%2"=="" (
-    set gitrepository=%2
-    goto:noinputsgit
-)
-:notselectedgit
-set ps_cmdgit=powershell "Add-Type -AssemblyName System.windows.forms|Out-Null;$f=New-Object System.Windows.Forms.FolderBrowserDialog;$f.ShowDialog()|Out-Null;$f.SelectedPath"
-for /f "delims=" %%I in ('%ps_cmdgit%') do set "selectedpathgit=%%I"
-if not defined selectedpathgit (
-    echo.
-    echo %errormsg% Did not choose a folder.
-    echo.
-    goto:notselectedgit
-)
-set gitrepository=%selectedpathgit%
-:noinputsgit
-
-/LOADINF="%gitrepository%\Programming\Config\Config.asf"
